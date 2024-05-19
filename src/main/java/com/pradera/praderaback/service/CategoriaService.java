@@ -51,9 +51,12 @@ public class CategoriaService {
 
     public CategoriaDTO obtener(Integer id) {
         CategoriaModel categoria = repositorio.findById(id).orElse(null);
-        CategoriaDTO dto = new CategoriaDTO();
-        dto.setId(categoria.getId());
-        dto.setNombre(categoria.getNombre());
+        CategoriaDTO dto = null;
+        if(categoria != null){
+            dto = new CategoriaDTO();
+            dto.setId(categoria.getId());
+            dto.setNombre(categoria.getNombre());
+        }
         return dto;
     }
 
