@@ -27,14 +27,6 @@ public class CategoriaController {
         }
     }
 
-
-
-
-
-
-
-
-
     @GetMapping("/listar")
     public @ResponseBody List<CategoriaDTO> listar(){
         return service.listar();
