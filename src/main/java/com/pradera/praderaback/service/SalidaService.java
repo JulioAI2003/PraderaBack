@@ -1,12 +1,12 @@
 package com.pradera.praderaback.service;
 
-import com.pradera.praderaback.dto.CategoriaDTO;
-import com.pradera.praderaback.dto.ProductoDTO;
 import com.pradera.praderaback.dto.SalidaDTO;
-import com.pradera.praderaback.model.CategoriaModel;
 import com.pradera.praderaback.model.ProductoModel;
-import com.pradera.praderaback.repository.CategoriaRepository;
+import com.pradera.praderaback.model.SalidaModel;
+import com.pradera.praderaback.model.TrabajadorModel;
 import com.pradera.praderaback.repository.ProductoRepository;
+import com.pradera.praderaback.repository.SalidaRepository;
+import com.pradera.praderaback.repository.TrabajadorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,37 +27,40 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductoService {
+public class SalidaService {
 
     @Autowired
-    private ProductoRepository repository;
+    private SalidaRepository repository;
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    private ProductoRepository productoRepository;
+    @Autowired
+    private TrabajadorRepository trabajadorRepository;
     @Autowired
     private ModelMapper modelMapper;
 
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder cb;
-    private CriteriaQuery<ProductoModel> cq;
-    private Root<ProductoModel> root;
+    private CriteriaQuery<SalidaModel> cq;
+    private Root<SalidaModel> root;
     private CriteriaQuery<Long> cqCont;
-    private Root<ProductoModel> rootCont;
+    private Root<SalidaModel> rootCont;
 
     public void initCb(){
         cb = em.getCriteriaBuilder();
-        cq = cb.createQuery(ProductoModel.class);
-        root = cq.from(ProductoModel.class);
+        cq = cb.createQuery(SalidaModel.class);
+        root = cq.from(SalidaModel.class);
         cqCont = cb.createQuery(Long.class);
-        rootCont = cqCont.from(ProductoModel.class);
+        rootCont = cqCont.from(SalidaModel.class);
     }
-    public TypedQuery<ProductoModel> filtrado(ProductoDTO filtro) {
+
+    public TypedQuery<SalidaModel> filtrado(SalidaDTO filtro) {
         initCb();
         cqCont.select(cb.count(rootCont));
         Predicate[] predicatesArray;
         var predicates = new ArrayList<Predicate>();
-        if (filtro.getNombre() != null) {
-            predicates.add(cb.equal(root.get("nombre"),filtro.getNombre()));
+        if (filtro.getProducto().getNombre() != null) {
+            predicates.add(cb.equal(root.get("producto").get("nombre"),filtro.getProducto().getNombre()));
         }
         predicatesArray = predicates.toArray(new Predicate[0]);
         cq.where(predicatesArray);
@@ -65,7 +68,8 @@ public class ProductoService {
         cq.select(root).distinct(true);
         return  em.createQuery(cq);
     }
-    public Page<ProductoDTO> bandeja(ProductoDTO filtro, Integer page, Integer size ){
+
+    public Page<SalidaDTO> bandeja(SalidaDTO filtro, Integer page, Integer size ){
         var result = this.filtrado(filtro);
         var resultCont = em.createQuery(cqCont);
         Long all = resultCont.getSingleResult();
@@ -73,37 +77,39 @@ public class ProductoService {
         result = result.setMaxResults(size);
         var resultList = result.getResultList();
         em.close();
-        List<ProductoDTO> response = resultList.stream().map(x ->
-                modelMapper.map(x, ProductoDTO.class)
+        List<SalidaDTO> response = resultList.stream().map(x ->
+                modelMapper.map(x, SalidaDTO.class)
         ).collect(Collectors.toList());
         Pageable pageable = PageRequest.of(page, size);
         return new PageImpl<>(response, pageable, all);
     }
 
-    public ProductoDTO obtener(Long id) {
-        ProductoModel producto = repository.findById(id).orElse(null);
-        return modelMapper.map(producto, ProductoDTO.class);
+    public SalidaDTO obtener(Long id) {
+        SalidaModel salida = repository.findById(id).orElse(null);
+        return modelMapper.map(salida, SalidaDTO.class);
     }
 
-    public List<ProductoDTO> listar() {
-        List<ProductoDTO> listadto = new ArrayList<>();
-        List<ProductoModel> listamodelo = repository.findAll();
-        for (ProductoModel producto : listamodelo
+    public List<SalidaDTO> listar() {
+        List<SalidaDTO> listadto = new ArrayList<>();
+        List<SalidaModel> listamodelo = repository.findAll();
+        for (SalidaModel salida : listamodelo
         ) {
-            ProductoDTO dto = modelMapper.map(producto, ProductoDTO.class);
+            SalidaDTO dto = modelMapper.map(salida, SalidaDTO.class);
             listadto.add(dto);
         }
         return listadto;
     }
 
-    public void guardar(ProductoDTO dto) {
-        ProductoModel producto = new ProductoModel();
-        CategoriaModel categoria = categoriaRepository.findById(dto.getCategoria().getId()).orElse(null);
-        producto.setId(dto.getId());
-        producto.setNombre(dto.getNombre());
-        producto.setPresentacion(dto.getPresentacion());
-        producto.setCategoria(categoria);
-        repository.save(producto);
+    public void guardar(SalidaDTO dto) {
+        ProductoModel producto = productoRepository.findById(dto.getProducto().getId()).orElse(null);
+        TrabajadorModel trabajador = trabajadorRepository.findById(dto.getTrabajador().getId()).orElse(null);
+        SalidaModel salida = new SalidaModel();
+        salida.setId(dto.getId());
+        salida.setProducto(producto);
+        salida.setTrabajador(trabajador);
+        salida.setCantidad(dto.getCantidad());
+        salida.setFecha(dto.getFecha());
+        repository.save(salida);
     }
 
     public void eliminar(Long id) {
