@@ -1,7 +1,6 @@
 package com.pradera.praderaback.controller;
 
 import com.pradera.praderaback.dto.ProveedorDTO;
-import com.pradera.praderaback.model.ProveedorModel;
 import com.pradera.praderaback.service.ProveedorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,45 +10,58 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/proveedor")
+@RequestMapping("/v1/proveedor")
 public class ProveedorController {
 
     @Autowired
     private ProveedorService service;
 
+    @RequestMapping(path = "/bandeja", method = RequestMethod.GET)
+    public ResponseEntity<Object> bandeja(
+            ProveedorDTO dto,
+            @RequestParam(name = "page") Integer page,
+            @RequestParam(name = "size") Integer size){
+        try {
+            return ResponseEntity.ok().body(service.bandeja(dto,page,size));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
+        }
+    }
+
     @RequestMapping(path = "/listar", method = RequestMethod.GET)
     public ResponseEntity<List<ProveedorDTO>> listar() {
-        return new ResponseEntity<>(service.listar(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(service.listar(), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(path = "/obtener/{id}", method = RequestMethod.GET)
     public ResponseEntity<ProveedorDTO> obtener(@PathVariable Long id) {
-        ProveedorDTO dto = service.obtener(id);
-        if (dto != null) {
-            return new ResponseEntity<>(dto, HttpStatus.OK);
-        } else {
+        try{
+            return new ResponseEntity<>(service.obtener(id), HttpStatus.OK);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(path = "/guardar", method = RequestMethod.POST)
     public ResponseEntity<Void> guardar(@RequestBody ProveedorDTO dto) {
-        if(dto.getId()!=null){
-            ProveedorDTO proveedorDTO = service.obtener(dto.getId());
-            if(proveedorDTO == null){
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        try{
+            service.guardar(dto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        service.guardar(dto);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(path = "/eliminar/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (service.obtener(id) != null) {
+        try{
             service.eliminar(id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
