@@ -1,23 +1,21 @@
 package com.pradera.praderaback.controller;
 
-import com.pradera.praderaback.dto.CategoriaDTO;
-import com.pradera.praderaback.service.CategoriaService;
+import com.pradera.praderaback.dto.IngresoDTO;
+import com.pradera.praderaback.service.IngresoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/v1/categoria")
-public class CategoriaController {
+@RequestMapping("/v1/ingreso")
+public class IngresoController {
 
     @Autowired
-    private CategoriaService service;
+    private IngresoService service;
 
     @GetMapping("/bandeja")
     public ResponseEntity<Object> bandeja(
-            CategoriaDTO dto,
+            IngresoDTO dto,
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "size") Integer size){
         try {
@@ -28,12 +26,12 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody CategoriaDTO obtenerID(@PathVariable Long id) {
-        return service.obtener(id);
+    public @ResponseBody IngresoDTO obtenerID(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @PostMapping("/guardar")
-    public @ResponseBody void guardar(@RequestBody CategoriaDTO dto) {
+    public @ResponseBody void guardar(@RequestBody IngresoDTO dto) {
         service.guardar(dto);
     }
 
