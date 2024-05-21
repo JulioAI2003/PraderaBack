@@ -1,7 +1,7 @@
 package com.pradera.praderaback.controller;
 
-import com.pradera.praderaback.dto.ProveedorDTO;
-import com.pradera.praderaback.service.ProveedorService;
+import com.pradera.praderaback.dto.TrabajadorDTO;
+import com.pradera.praderaback.service.TrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/proveedor")
-public class ProveedorController {
+@RequestMapping("/v1/trabajador")
+public class TrabajadorController {
 
     @Autowired
-    private ProveedorService service;
+    private TrabajadorService service;
 
     @RequestMapping(path = "/bandeja", method = RequestMethod.GET)
     public ResponseEntity<Object> bandeja(
-            ProveedorDTO dto,
+            TrabajadorDTO dto,
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "size") Integer size){
         try {
@@ -29,7 +29,7 @@ public class ProveedorController {
     }
 
     @RequestMapping(path = "/listar", method = RequestMethod.GET)
-    public ResponseEntity<List<ProveedorDTO>> listar() {
+    public ResponseEntity<List<TrabajadorDTO>> listar() {
         try {
             return new ResponseEntity<>(service.listar(), HttpStatus.OK);
         } catch (Exception e){
@@ -38,7 +38,7 @@ public class ProveedorController {
     }
 
     @RequestMapping(path = "/obtener/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ProveedorDTO> obtener(@PathVariable Long id) {
+    public ResponseEntity<TrabajadorDTO> obtener(@PathVariable Long id) {
         try{
             return new ResponseEntity<>(service.obtener(id), HttpStatus.OK);
         } catch (Exception e){
@@ -47,7 +47,7 @@ public class ProveedorController {
     }
 
     @RequestMapping(path = "/guardar", method = RequestMethod.POST)
-    public ResponseEntity<Void> guardar(@RequestBody ProveedorDTO dto) {
+    public ResponseEntity<Void> guardar(@RequestBody TrabajadorDTO dto) {
         try{
             service.guardar(dto);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -65,4 +65,5 @@ public class ProveedorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }

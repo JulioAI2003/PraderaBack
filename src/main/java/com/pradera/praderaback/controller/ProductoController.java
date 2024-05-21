@@ -28,19 +28,6 @@ public class ProductoController {
         }
     }
 
-    @GetMapping("/bandeja")
-    public ResponseEntity<Object> bandeja(
-            ProductoDTO dto,
-            @RequestParam(name = "page") Integer page,
-            @RequestParam(name = "size") Integer size){
-        try {
-            return ResponseEntity.ok().body(service.bandeja(dto,page,size));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.toString());
-        }
-    }
-
-
     @RequestMapping(path = "/listar", method = RequestMethod.GET)
     public ResponseEntity<List<ProductoDTO>> listar() {
         try{
@@ -65,7 +52,7 @@ public class ProductoController {
             service.guardar(dto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

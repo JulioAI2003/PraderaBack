@@ -50,57 +50,6 @@ public class ProductoService {
         cqCont = cb.createQuery(Long.class);
         rootCont = cqCont.from(ProductoModel.class);
     }
-
-    public TypedQuery<ProductoModel> filtrado(ProductoDTO filtro) {
-        initCb();
-        cqCont.select(cb.count(rootCont));
-        Predicate[] predicatesArray;
-        var predicates = new ArrayList<Predicate>();
-        if (filtro.getNombre() != null) {
-            predicates.add(cb.equal(root.get("nombre"),filtro.getNombre()));
-        }
-        predicatesArray = predicates.toArray(new Predicate[0]);
-        cq.where(predicatesArray);
-        cqCont.where(predicatesArray);
-        cq.select(root).distinct(true);
-        return  em.createQuery(cq);
-    }
-
-    public Page<ProductoDTO> bandeja(ProductoDTO filtro, Integer page, Integer size ){
-        var result = this.filtrado(filtro);
-        var resultCont = em.createQuery(cqCont);
-        Long all = resultCont.getSingleResult();
-        result = result.setFirstResult(page);
-        result = result.setMaxResults(size);
-        var resultList = result.getResultList();
-        em.close();
-        List<ProductoDTO> response = resultList.stream().map(x ->
-                modelMapper.map(x, ProductoDTO.class)
-        ).collect(Collectors.toList());
-        Pageable pageable = PageRequest.of(page, size);
-        return new PageImpl<>(response, pageable, all);
-    }
-
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @PersistenceContext
-    private EntityManager em;
-    private CriteriaBuilder cb;
-    private CriteriaQuery<ProductoModel> cq;
-    private Root<ProductoModel> root;
-    private CriteriaQuery<Long> cqCont;
-    private Root<ProductoModel> rootCont;
-
-
-    public void initCb(){
-        cb = em.getCriteriaBuilder();
-        cq = cb.createQuery(ProductoModel.class);
-        root = cq.from(ProductoModel.class);
-        cqCont = cb.createQuery(Long.class);
-        rootCont = cqCont.from(ProductoModel.class);
-    }
     public TypedQuery<ProductoModel> filtrado(ProductoDTO filtro) {
         initCb();
         cqCont.select(cb.count(rootCont));
@@ -159,9 +108,7 @@ public class ProductoService {
     public void guardar(ProductoDTO dto) {
         ProductoModel producto = new ProductoModel();
         CategoriaModel categoria = categoriaRepository.findById(dto.getCategoria().getId()).orElse(null);
-        if(dto.getId() != null){
-            producto.setId(dto.getId());
-        }
+        producto.setId(dto.getId());
         producto.setNombre(dto.getNombre());
         producto.setPresentacion(dto.getPresentacion());
         producto.setCategoria(categoria);
