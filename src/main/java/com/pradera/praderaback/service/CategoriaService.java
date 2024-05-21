@@ -1,7 +1,9 @@
 package com.pradera.praderaback.service;
 
 import com.pradera.praderaback.dto.CategoriaDTO;
+import com.pradera.praderaback.dto.ProductoDTO;
 import com.pradera.praderaback.model.CategoriaModel;
+import com.pradera.praderaback.model.ProductoModel;
 import com.pradera.praderaback.repository.CategoriaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +94,7 @@ public class CategoriaService {
         repositorio.save(categoria);
     }
 
-    public void eliminar(Integer id) {
+    public void eliminar(Long id) {
         repositorio.deleteById(id);
     }
 
@@ -109,7 +111,7 @@ public class CategoriaService {
         return listadto;
     }
 
-    public CategoriaDTO obtener(Integer id) {
+    public CategoriaDTO obtener(Long id) {
         CategoriaModel categoria = repositorio.findById(id).orElse(null);
         CategoriaDTO dto = null;
         if(categoria != null){
@@ -119,5 +121,4 @@ public class CategoriaService {
         }
         return dto;
     }
-
 }

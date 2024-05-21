@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/producto")
+@RequestMapping("/v1/producto")
 public class ProductoController {
 
     @Autowired
@@ -27,6 +27,19 @@ public class ProductoController {
             return ResponseEntity.badRequest().body(e.toString());
         }
     }
+
+    @GetMapping("/bandeja")
+    public ResponseEntity<Object> bandeja(
+            ProductoDTO dto,
+            @RequestParam(name = "page") Integer page,
+            @RequestParam(name = "size") Integer size){
+        try {
+            return ResponseEntity.ok().body(service.bandeja(dto,page,size));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
+        }
+    }
+
 
     @RequestMapping(path = "/listar", method = RequestMethod.GET)
     public ResponseEntity<List<ProductoDTO>> listar() {
