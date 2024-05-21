@@ -10,5 +10,6 @@ public class ProductoDTO {
     private Long id;
     private String nombre;
     private String presentacion;
-    private CategoriaModel categoria;
+    private Long categoriaId;
+    private String categoriaNombre;
 }

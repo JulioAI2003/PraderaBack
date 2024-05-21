@@ -58,7 +58,7 @@ public class ProductoController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        CategoriaDTO categoriaDTO = categoriaService.obtener(dto.getCategoria().getId());
+        CategoriaDTO categoriaDTO = categoriaService.obtener(dto.getCategoriaId());
         if(categoriaDTO == null){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

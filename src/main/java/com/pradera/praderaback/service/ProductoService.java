@@ -93,7 +93,7 @@ public class ProductoService {
             dto.setId(producto.getId());
             dto.setNombre(producto.getNombre());
             dto.setPresentacion(producto.getPresentacion());
-            dto.setCategoria(producto.getCategoria());
+            dto.setCategoriaId(producto.getCategoria().getId());
         }
         return dto;
     }
@@ -107,7 +107,7 @@ public class ProductoService {
             dto.setId(producto.getId());
             dto.setNombre(producto.getNombre());
             dto.setPresentacion(producto.getPresentacion());
-            dto.setCategoria(producto.getCategoria());
+            dto.setCategoriaId(producto.getCategoria().getId());
             listadto.add(dto);
         }
         return listadto;
@@ -115,7 +115,7 @@ public class ProductoService {
 
     public void guardar(ProductoDTO dto) {
         ProductoModel producto = new ProductoModel();
-        CategoriaModel categoria = categoriaRepository.findById(dto.getCategoria().getId()).orElse(null);
+        CategoriaModel categoria = categoriaRepository.findById(dto.getCategoriaId()).orElse(null);
         if(dto.getId() != null){
             producto.setId(dto.getId());
         }

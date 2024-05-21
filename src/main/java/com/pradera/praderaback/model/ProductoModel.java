@@ -29,5 +29,5 @@ public class ProductoModel {
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_prod_id_cat_pra")
     )
-    private CategoriaModel Categoria;
+    private CategoriaModel categoria;
 }
