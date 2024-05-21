@@ -14,7 +14,7 @@ public class CategoriaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "nom_cat_pra", nullable=false)
     private String nombre;
