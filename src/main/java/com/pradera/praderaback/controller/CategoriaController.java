@@ -27,11 +27,6 @@ public class CategoriaController {
         }
     }
 
-    @GetMapping("/listar")
-    public @ResponseBody List<CategoriaDTO> listar(){
-        return service.listar();
-    }
-
     @GetMapping("/{id}")
     public @ResponseBody CategoriaDTO obtenerID(@PathVariable Integer id) {
         return service.obtener(id);
