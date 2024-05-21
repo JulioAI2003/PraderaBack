@@ -1,11 +1,14 @@
 package com.pradera.praderaback.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.type.LocalDateTimeType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -31,5 +34,5 @@ public class IngresosModel {
     private int cantidad;
 
     @Column(name = "fech_ingr_pra", nullable=false)
-    private LocalDateTime fecha;
+    private LocalDateTime fecha = LocalDateTime.now();
 }
