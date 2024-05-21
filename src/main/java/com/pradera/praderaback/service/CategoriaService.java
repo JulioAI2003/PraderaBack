@@ -1,7 +1,9 @@
 package com.pradera.praderaback.service;
 
 import com.pradera.praderaback.dto.CategoriaDTO;
+import com.pradera.praderaback.dto.ProductoDTO;
 import com.pradera.praderaback.model.CategoriaModel;
+import com.pradera.praderaback.model.ProductoModel;
 import com.pradera.praderaback.repository.CategoriaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,5 +121,4 @@ public class CategoriaService {
         }
         return dto;
     }
-
 }

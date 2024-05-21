@@ -1,8 +1,10 @@
 package com.pradera.praderaback.controller;
 
 import com.pradera.praderaback.dto.CategoriaDTO;
+import com.pradera.praderaback.dto.ProductoDTO;
 import com.pradera.praderaback.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,11 @@ public class CategoriaController {
     @DeleteMapping("/eliminar/{id}")
     public @ResponseBody void eliminar(@PathVariable Integer id) {
         service.eliminar(id);
+    }
+
+    @RequestMapping(path = "/listar", method = RequestMethod.GET)
+    public ResponseEntity<List<CategoriaDTO>> listar() {
+        return new ResponseEntity<>(service.listar(), HttpStatus.OK);
     }
 
 }
