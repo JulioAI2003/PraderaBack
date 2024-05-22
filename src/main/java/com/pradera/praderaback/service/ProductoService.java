@@ -100,7 +100,7 @@ public class ProductoService {
 
     public void guardar(ProductoDTO dto) {
         ProductoModel producto = new ProductoModel();
-        CategoriaModel categoria = categoriaRepository.findById(dto.getCategoria().getId()).orElse(null);
+        CategoriaModel categoria = categoriaRepository.findById(dto.getCategoriaId()).orElse(null);
         producto.setId(dto.getId());
         producto.setNombre(dto.getNombre());
         producto.setPresentacion(dto.getPresentacion());
