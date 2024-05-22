@@ -1,6 +1,7 @@
 package com.pradera.praderaback.service;
 
 import com.pradera.praderaback.dto.IngresoDTO;
+import com.pradera.praderaback.model.CategoriaModel;
 import com.pradera.praderaback.model.IngresosModel;
 import com.pradera.praderaback.model.ProductoModel;
 import com.pradera.praderaback.repository.IngresoRepository;
@@ -77,13 +78,14 @@ public class IngresoService {
     }
 
     public void guardar(IngresoDTO dto) {
+
         IngresosModel ingreso = new IngresosModel();
         ProductoModel producto = new ProductoModel();
         producto.setId(dto.getProductoId());
-
-        ingreso.setProducto(producto);
+        ingreso.setId(dto.getId());
         ingreso.setCantidad(dto.getCantidad());
-        ingreso.setFecha(dto.getFecha());
+        ingreso.setProducto(producto);
+
         repository.save(ingreso);
     }
 

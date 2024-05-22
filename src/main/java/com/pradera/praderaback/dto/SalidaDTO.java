@@ -1,5 +1,6 @@
 package com.pradera.praderaback.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pradera.praderaback.model.ProductoModel;
 import com.pradera.praderaback.model.TrabajadorModel;
 import lombok.Getter;
@@ -14,7 +15,7 @@ public class SalidaDTO {
 
     private Long id;
     private Integer cantidad;
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime fecha;
     private ProductoDTO producto;
     private TrabajadorDTO trabajador;

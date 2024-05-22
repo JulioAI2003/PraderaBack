@@ -1,5 +1,6 @@
 package com.pradera.praderaback.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +15,7 @@ public class IngresoDTO {
     private Long id;
     private String productoNombre;
     private int cantidad;
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime fecha;
 
     //GUARDAR
