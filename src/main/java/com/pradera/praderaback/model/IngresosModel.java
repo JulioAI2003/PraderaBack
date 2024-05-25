@@ -21,7 +21,6 @@ public class IngresosModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(
             name = "id_prod_pra",

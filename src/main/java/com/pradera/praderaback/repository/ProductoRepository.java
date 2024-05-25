@@ -12,19 +12,22 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<ProductoModel, Long> {
 
     @Query(value = "SELECT \n" +
-            "    pp.nom_prod_pra AS Producto, \n" +
-            "    COALESCE(SUM(ip.cant_ingr_pra), 0) AS Entradas, \n" +
-            "    COALESCE(SUM(sp.cant_sali_pra), 0) AS Salidas,\n" +
-            "    COALESCE(SUM(ip.cant_ingr_pra), 0) - COALESCE(SUM(sp.cant_sali_pra), 0) AS Stock\n" +
+            "    pp.id AS id,\n" +
+            "    pp.nom_prod_pra AS producto, \n" +
+            "    COALESCE(ip.cant_ingr_pra, 0) AS entradas, \n" +
+            "    COALESCE(sp.cant_sali_pra, 0) AS salidas,\n" +
+            "    COALESCE(ip.cant_ingr_pra, 0) - COALESCE(sp.cant_sali_pra, 0) AS stock\n" +
             "FROM prod_pra pp\n" +
-            "LEFT JOIN (SELECT id_prod_pra, SUM(cant_ingr_pra) AS cant_ingr_pra \n" +
-            "           FROM ingr_pra \n" +
-            "           GROUP BY id_prod_pra) ip\n" +
-            "    ON pp.id = ip.id_prod_pra\n" +
-            "LEFT JOIN (SELECT id_producto, SUM(cant_sali_pra) AS cant_sali_pra \n" +
-            "           FROM sali_pra \n" +
-            "           GROUP BY id_producto) sp\n" +
-            "    ON pp.id = sp.id_producto\n" +
-            "GROUP BY pp.nom_prod_pra;", nativeQuery = true)
-    List<Tuple> findEntradasSalidas();
+            "LEFT JOIN (\n" +
+            "    SELECT id_prod_pra, SUM(cant_ingr_pra) AS cant_ingr_pra \n" +
+            "    FROM ingr_pra \n" +
+            "    GROUP BY id_prod_pra\n" +
+            ") ip ON pp.id = ip.id_prod_pra\n" +
+            "LEFT JOIN (\n" +
+            "    SELECT id_prod_pra, SUM(cant_sali_pra) AS cant_sali_pra \n" +
+            "    FROM sali_pra \n" +
+            "    GROUP BY id_prod_pra\n" +
+            ") sp ON pp.id = sp.id_prod_pra\n" +
+            "GROUP BY pp.id, pp.nom_prod_pra", nativeQuery = true)
+    List<Tuple> findKardex();
 }

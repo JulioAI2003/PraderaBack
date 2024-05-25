@@ -24,6 +24,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,8 +35,6 @@ public class ProductoService {
 
     @Autowired
     private ProductoRepository repository;
-    @Autowired
-    private CategoriaRepository categoriaRepository;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -99,12 +99,7 @@ public class ProductoService {
     }
 
     public void guardar(ProductoDTO dto) {
-        ProductoModel producto = new ProductoModel();
-        CategoriaModel categoria = categoriaRepository.findById(dto.getCategoria().getId()).orElse(null);
-        producto.setId(dto.getId());
-        producto.setNombre(dto.getNombre());
-        producto.setPresentacion(dto.getPresentacion());
-        producto.setCategoria(categoria);
+        ProductoModel producto = modelMapper.map(dto, ProductoModel.class);
         repository.save(producto);
     }
 
@@ -112,18 +107,15 @@ public class ProductoService {
         repository.deleteById(id);
     }
 
-    public List<KardexResponse> consumos(){
-        List<Tuple> response = repository.findEntradasSalidas();
-        List<KardexResponse> lista = new ArrayList<>();
-        for (Tuple data : response){
-            KardexResponse kardex = new KardexResponse();
-            kardex.setProducto(String.valueOf(data.get("Producto")));
-            kardex.setEntradas(Integer.parseInt(String.valueOf(data.get("Entradas"))));
-            kardex.setSalidas(Integer.parseInt(String.valueOf(data.get("Salidas"))));
-            kardex.setStock(Integer.parseInt(String.valueOf(data.get("Stock"))));
-            lista.add(kardex);
-        }
-        return lista;
+    public List<KardexResponse> kardex(){
+        List<Tuple> data = repository.findKardex();
+        return data.stream().map(x -> new KardexResponse(
+                x.get("id", BigInteger.class).longValue(),
+                x.get("producto", String.class),
+                x.get("entradas", BigDecimal.class).intValue(),
+                x.get("salidas", BigDecimal.class).intValue(),
+                x.get("stock", BigDecimal.class).intValue())
+        ).collect(Collectors.toList());
     }
 
 }

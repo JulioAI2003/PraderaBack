@@ -52,6 +52,7 @@ public class ProductoController {
             service.guardar(dto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
+            System.out.println(e.toString());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

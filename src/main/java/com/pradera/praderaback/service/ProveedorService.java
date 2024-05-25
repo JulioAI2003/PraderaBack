@@ -78,12 +78,7 @@ public class ProveedorService {
 
     public ProveedorDTO obtener(Long id) {
         ProveedorModel proveedor = repository.findById(id).orElse(null);
-        ProveedorDTO dto = new ProveedorDTO();
-        assert proveedor != null;
-        dto.setId(proveedor.getId());
-        dto.setNombre(proveedor.getNombre());
-        dto.setRuc(proveedor.getRuc());
-        return dto;
+        return modelMapper.map(proveedor, ProveedorDTO.class);
     }
 
     public List<ProveedorDTO> listar() {
@@ -91,20 +86,14 @@ public class ProveedorService {
         List<ProveedorModel> listamodelo = repository.findAll();
         for (ProveedorModel proveedor : listamodelo
         ) {
-            ProveedorDTO dto = new ProveedorDTO();
-            dto.setId(proveedor.getId());
-            dto.setNombre(proveedor.getNombre());
-            dto.setRuc(proveedor.getRuc());
+            ProveedorDTO dto = modelMapper.map(proveedor, ProveedorDTO.class);
             listadto.add(dto);
         }
         return listadto;
     }
 
     public void guardar(ProveedorDTO dto) {
-        ProveedorModel proveedor = new ProveedorModel();
-        proveedor.setId(dto.getId());
-        proveedor.setNombre(dto.getNombre());
-        proveedor.setRuc(dto.getRuc());
+        ProveedorModel proveedor = modelMapper.map(dto, ProveedorModel.class);
         repository.save(proveedor);
     }
 

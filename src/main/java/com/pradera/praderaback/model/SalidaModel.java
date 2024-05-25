@@ -24,17 +24,17 @@ public class SalidaModel {
     @Column(name = "fech_sali_pra", nullable=false)
     private LocalDateTime fecha;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(
-            name="id_producto",
+            name="id_prod_pra",
             nullable=false,
             foreignKey = @ForeignKey(name="FK_sali_id_prod_pra")
     )
     private ProductoModel producto;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(
-            name="id_trabajador",
+            name="id_trab_pra",
             nullable=false,
             foreignKey = @ForeignKey(name="FK_sali_id_trab_pra")
     )

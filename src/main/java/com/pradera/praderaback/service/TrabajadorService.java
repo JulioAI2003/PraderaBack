@@ -78,14 +78,7 @@ public class TrabajadorService {
 
     public TrabajadorDTO obtener(Long id) {
         TrabajadorModel trabajador = repository.findById(id).orElse(null);
-        assert trabajador != null;
-        TrabajadorDTO dto = new TrabajadorDTO();
-        dto.setId(trabajador.getId());
-        dto.setNombres(trabajador.getNombres());
-        dto.setApellidop(trabajador.getApellidop());
-        dto.setApellidom(trabajador.getApellidom());
-        dto.setDni(trabajador.getDni());
-        return dto;
+        return modelMapper.map(trabajador, TrabajadorDTO.class);
     }
 
     public List<TrabajadorDTO> listar() {
@@ -93,24 +86,14 @@ public class TrabajadorService {
         List<TrabajadorModel> listamodelo = repository.findAll();
         for (TrabajadorModel trabajador : listamodelo
         ) {
-            TrabajadorDTO dto = new TrabajadorDTO();
-            dto.setId(trabajador.getId());
-            dto.setNombres(trabajador.getNombres());
-            dto.setApellidop(trabajador.getApellidop());
-            dto.setApellidom(trabajador.getApellidom());
-            dto.setDni(trabajador.getDni());
+            TrabajadorDTO dto = modelMapper.map(trabajador, TrabajadorDTO.class);
             listadto.add(dto);
         }
         return listadto;
     }
 
     public void guardar(TrabajadorDTO dto) {
-        TrabajadorModel trabajador = new TrabajadorModel();
-        trabajador.setId(dto.getId());
-        trabajador.setNombres(dto.getNombres());
-        trabajador.setApellidop(dto.getApellidop());
-        trabajador.setApellidom(dto.getApellidom());
-        trabajador.setDni(dto.getDni());
+        TrabajadorModel trabajador = modelMapper.map(dto, TrabajadorModel.class);
         repository.save(trabajador);
     }
 
