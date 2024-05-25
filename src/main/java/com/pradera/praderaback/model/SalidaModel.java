@@ -22,7 +22,7 @@ public class SalidaModel {
     private Integer cantidad;
 
     @Column(name = "fech_sali_pra", nullable=false)
-    private LocalDateTime fecha;
+    private LocalDateTime fecha = LocalDateTime.now();
 
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(
