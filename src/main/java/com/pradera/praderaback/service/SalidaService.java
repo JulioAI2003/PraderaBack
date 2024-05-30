@@ -1,6 +1,7 @@
 package com.pradera.praderaback.service;
 
 import com.pradera.praderaback.dto.SalidaDTO;
+import com.pradera.praderaback.model.IngresosModel;
 import com.pradera.praderaback.model.ProductoModel;
 import com.pradera.praderaback.model.SalidaModel;
 import com.pradera.praderaback.model.TrabajadorModel;
@@ -59,8 +60,8 @@ public class SalidaService {
         cqCont.select(cb.count(rootCont));
         Predicate[] predicatesArray;
         var predicates = new ArrayList<Predicate>();
-        if (filtro.getProducto().getNombre() != null) {
-            predicates.add(cb.equal(root.get("producto").get("nombre"),filtro.getProducto().getNombre()));
+        if (filtro.getProductoNombre() != null) {
+            predicates.add(cb.equal(root.get("producto").get("nombre"),filtro.getProductoNombre()));
         }
         predicatesArray = predicates.toArray(new Predicate[0]);
         cq.where(predicatesArray);
@@ -101,15 +102,27 @@ public class SalidaService {
     }
 
     public void guardar(SalidaDTO dto) {
-        ProductoModel producto = productoRepository.findById(dto.getProducto().getId()).orElse(null);
-        TrabajadorModel trabajador = trabajadorRepository.findById(dto.getTrabajador().getId()).orElse(null);
+//        ProductoModel producto = productoRepository.findById(dto.getProductoId()).orElse(null);
+//        TrabajadorModel trabajador = trabajadorRepository.findById(dto.getTrabajador().getId()).orElse(null);
+//        SalidaModel salida = new SalidaModel();
+//        salida.setId(dto.getId());
+//        salida.setProducto(producto);
+//        salida.setTrabajador(trabajador);
+//        salida.setCantidad(dto.getCantidad());
+//        salida.setFecha(dto.getFecha());
+
         SalidaModel salida = new SalidaModel();
-        salida.setId(dto.getId());
+        ProductoModel producto = new ProductoModel();
+        producto.setId(dto.getProductoId());
+        TrabajadorModel trabajador = new TrabajadorModel();
+        trabajador.setId(dto.getTrabajadorId());
+//        salida.setId(dto.getId());
+        salida.setId(43434345L);//prueba
+        salida.setCantidad(dto.getCantidad());
         salida.setProducto(producto);
         salida.setTrabajador(trabajador);
-        salida.setCantidad(dto.getCantidad());
-        salida.setFecha(dto.getFecha());
         repository.save(salida);
+
     }
 
     public void eliminar(Long id) {

@@ -17,6 +17,8 @@ public class SalidaDTO {
     private Integer cantidad;
     @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime fecha;
-    private ProductoDTO producto;
-    private TrabajadorDTO trabajador;
+    private String productoNombre;
+    private Long productoId;
+    private String trabajadorNombre;
+    private Long trabajadorId;
 }
