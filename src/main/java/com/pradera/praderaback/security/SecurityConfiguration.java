@@ -38,7 +38,7 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
-                .antMatchers("/authenticate",
+                .antMatchers("/login/authenticate",
                         "/usuario/registrar").permitAll()
                 .anyRequest()
                 .authenticated()
