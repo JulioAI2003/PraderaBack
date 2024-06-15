@@ -1,7 +1,6 @@
 package com.pradera.praderaback.controller;
 
 import com.pradera.praderaback.dto.CategoriaDTO;
-import com.pradera.praderaback.dto.ProductoDTO;
 import com.pradera.praderaback.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/categoria")
+@RequestMapping("/categoria")
 public class CategoriaController {
 
     @Autowired
