@@ -66,4 +66,8 @@ public class UsuarioService {
         UsuarioModel usuarioModel = repository.findUserByUsername(usuarioDTO.getUsername(), usuarioDTO.getId()).orElse(null);
         return usuarioModel == null;
     }
+
+    public UsuarioDTO findByUsername(String username){
+        return modelMapper.map(repository.findByUsername(username).orElse(null), UsuarioDTO.class);
+    }
 }

@@ -8,4 +8,5 @@ import lombok.Getter;
 public class JwtResponse {
     private Boolean respuesta;
     private final String token;
+    private UsuarioDTO usuario;
 }
