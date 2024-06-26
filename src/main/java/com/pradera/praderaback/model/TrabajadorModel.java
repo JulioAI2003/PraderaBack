@@ -28,4 +28,8 @@ public class TrabajadorModel {
 
     @Column(name = "dni_trab_pra", nullable=false)
     private String dni;
+
+    public String nombreCompleto(){
+        return this.nombres + " " + this.apellidop + " " + this.apellidom;
+    }
 }

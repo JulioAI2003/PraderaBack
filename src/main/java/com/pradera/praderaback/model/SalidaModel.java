@@ -24,7 +24,7 @@ public class SalidaModel {
     @Column(name = "fech_sali_pra", nullable=false)
     private LocalDateTime fecha = LocalDateTime.now();
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(
             name="id_prod_pra",
             nullable=false,
@@ -32,7 +32,7 @@ public class SalidaModel {
     )
     private ProductoModel producto;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(
             name="id_trab_pra",
             nullable=false,

@@ -33,10 +33,6 @@ public class SalidaService {
     @Autowired
     private SalidaRepository repository;
     @Autowired
-    private ProductoRepository productoRepository;
-    @Autowired
-    private TrabajadorRepository trabajadorRepository;
-    @Autowired
     private ModelMapper modelMapper;
 
     @PersistenceContext
@@ -78,9 +74,18 @@ public class SalidaService {
         result = result.setMaxResults(size);
         var resultList = result.getResultList();
         em.close();
-        List<SalidaDTO> response = resultList.stream().map(x ->
-                modelMapper.map(x, SalidaDTO.class)
-        ).collect(Collectors.toList());
+        List<SalidaDTO> response = new ArrayList<>();
+        for (SalidaModel data: resultList) {
+            SalidaDTO salida = new SalidaDTO();
+            salida.setId(data.getId());
+            salida.setFecha(data.getFecha());
+            salida.setCantidad(data.getCantidad());
+            salida.setProductoId(data.getProducto().getId());
+            salida.setProductoNombre(data.getProducto().getNombre());
+            salida.setTrabajadorId(data.getTrabajador().getId());
+            salida.setTrabajadorNombre(data.getTrabajador().nombreCompleto());
+            response.add(salida);
+        }
         Pageable pageable = PageRequest.of(page, size);
         return new PageImpl<>(response, pageable, all);
     }
@@ -93,36 +98,31 @@ public class SalidaService {
     public List<SalidaDTO> listar() {
         List<SalidaDTO> listadto = new ArrayList<>();
         List<SalidaModel> listamodelo = repository.findAll();
-        for (SalidaModel salida : listamodelo
-        ) {
-            SalidaDTO dto = modelMapper.map(salida, SalidaDTO.class);
-            listadto.add(dto);
+        for (SalidaModel data: listamodelo) {
+            SalidaDTO salida = new SalidaDTO();
+            salida.setId(data.getId());
+            salida.setFecha(data.getFecha());
+            salida.setCantidad(data.getCantidad());
+            salida.setProductoId(data.getProducto().getId());
+            salida.setProductoNombre(data.getProducto().getNombre());
+            salida.setTrabajadorId(data.getTrabajador().getId());
+            salida.setTrabajadorNombre(data.getTrabajador().nombreCompleto());
+            listadto.add(salida);
         }
         return listadto;
     }
 
     public void guardar(SalidaDTO dto) {
-//        ProductoModel producto = productoRepository.findById(dto.getProductoId()).orElse(null);
-//        TrabajadorModel trabajador = trabajadorRepository.findById(dto.getTrabajador().getId()).orElse(null);
-//        SalidaModel salida = new SalidaModel();
-//        salida.setId(dto.getId());
-//        salida.setProducto(producto);
-//        salida.setTrabajador(trabajador);
-//        salida.setCantidad(dto.getCantidad());
-//        salida.setFecha(dto.getFecha());
-
         SalidaModel salida = new SalidaModel();
         ProductoModel producto = new ProductoModel();
-        producto.setId(dto.getProductoId());
         TrabajadorModel trabajador = new TrabajadorModel();
+        producto.setId(dto.getProductoId());
         trabajador.setId(dto.getTrabajadorId());
-//        salida.setId(dto.getId());
-        salida.setId(43434345L);//prueba
-        salida.setCantidad(dto.getCantidad());
+        salida.setId(dto.getId());
         salida.setProducto(producto);
         salida.setTrabajador(trabajador);
+        salida.setCantidad(dto.getCantidad());
         repository.save(salida);
-
     }
 
     public void eliminar(Long id) {

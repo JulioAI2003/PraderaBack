@@ -4,6 +4,7 @@ import com.pradera.praderaback.dto.IngresoDTO;
 import com.pradera.praderaback.model.CategoriaModel;
 import com.pradera.praderaback.model.IngresosModel;
 import com.pradera.praderaback.model.ProductoModel;
+import com.pradera.praderaback.model.ProveedorModel;
 import com.pradera.praderaback.repository.IngresoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,21 @@ public class IngresoService {
         result = result.setMaxResults(size);
         var resultList = result.getResultList();
         em.close();
-        List<IngresoDTO> response = resultList.stream().map(x ->
-                modelMapper.map(x, IngresoDTO.class)
-        ).collect(Collectors.toList());
+        ArrayList<IngresoDTO> response = new ArrayList<>();
+        for (IngresosModel ingreso: resultList) {
+            IngresoDTO dto = new IngresoDTO();
+            dto.setId(ingreso.getId());
+            dto.setComprobante(ingreso.getComprobante());
+            dto.setFecha(ingreso.getFecha());
+            dto.setPrecio(ingreso.getPrecio());
+            dto.setCantidad(ingreso.getCantidad());
+            dto.setTotal(ingreso.calcularTotal());
+            dto.setProductoId(ingreso.getProducto().getId());
+            dto.setProductoNombre(ingreso.getProducto().getNombre());
+            dto.setProveedorId(ingreso.getProveedor().getId());
+            dto.setProveedorNombre(ingreso.getProveedor().getNombre());
+            response.add(dto);
+        }
         Pageable pageable = PageRequest.of(page, size);
         return new PageImpl<>(response, pageable, all);
     }
@@ -78,14 +91,17 @@ public class IngresoService {
     }
 
     public void guardar(IngresoDTO dto) {
-
         IngresosModel ingreso = new IngresosModel();
         ProductoModel producto = new ProductoModel();
+        ProveedorModel proveedor = new ProveedorModel();
         producto.setId(dto.getProductoId());
+        proveedor.setId(dto.getProveedorId());
         ingreso.setId(dto.getId());
         ingreso.setCantidad(dto.getCantidad());
+        ingreso.setPrecio(dto.getPrecio());
+        ingreso.setComprobante(dto.getComprobante());
         ingreso.setProducto(producto);
-
+        ingreso.setProveedor(proveedor);
         repository.save(ingreso);
     }
 
