@@ -11,4 +11,5 @@ public class ProductoDTO {
     private String nombre;
     private String presentacion;
     private CategoriaDTO categoria;
+    private String categoriaNombre;
 }

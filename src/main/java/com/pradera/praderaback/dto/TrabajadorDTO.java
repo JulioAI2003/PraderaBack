@@ -12,4 +12,5 @@ public class TrabajadorDTO {
     private String apellidop;
     private String apellidom;
     private String dni;
+    private String nombreCompleto;
 }

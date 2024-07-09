@@ -69,9 +69,17 @@ public class TrabajadorService {
         result = result.setMaxResults(size);
         var resultList = result.getResultList();
         em.close();
-        List<TrabajadorDTO> response = resultList.stream().map(x ->
-                modelMapper.map(x, TrabajadorDTO.class)
-        ).collect(Collectors.toList());
+        List<TrabajadorDTO> response = new ArrayList<>();
+        for(TrabajadorModel trabajador : resultList){
+            TrabajadorDTO dto = new TrabajadorDTO();
+            dto.setId(trabajador.getId());
+            dto.setNombres(trabajador.getNombres());
+            dto.setApellidop(trabajador.getApellidop());
+            dto.setApellidom(trabajador.getApellidom());
+            dto.setNombreCompleto(trabajador.nombreCompleto());
+            dto.setDni(trabajador.getDni());
+            response.add(dto);
+        }
         Pageable pageable = PageRequest.of(page, size);
         return new PageImpl<>(response, pageable, all);
     }
@@ -86,7 +94,13 @@ public class TrabajadorService {
         List<TrabajadorModel> listamodelo = repository.findAll();
         for (TrabajadorModel trabajador : listamodelo
         ) {
-            TrabajadorDTO dto = modelMapper.map(trabajador, TrabajadorDTO.class);
+            TrabajadorDTO dto = new TrabajadorDTO();
+            dto.setId(trabajador.getId());
+            dto.setNombres(trabajador.getNombres());
+            dto.setApellidop(trabajador.getApellidop());
+            dto.setApellidom(trabajador.getApellidom());
+            dto.setNombreCompleto(trabajador.nombreCompleto());
+            dto.setDni(trabajador.getDni());
             listadto.add(dto);
         }
         return listadto;
