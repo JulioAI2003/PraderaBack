@@ -99,7 +99,13 @@ public class ProductoService {
     }
 
     public void guardar(ProductoDTO dto) {
-        ProductoModel producto = modelMapper.map(dto, ProductoModel.class);
+        CategoriaModel categoria = new CategoriaModel();
+        categoria.setId(dto.getCategoriaId());
+        ProductoModel producto = new ProductoModel();
+        producto.setId(dto.getId());
+        producto.setCategoria(categoria);
+        producto.setNombre(dto.getNombre());
+        producto.setPresentacion(dto.getPresentacion());
         repository.save(producto);
     }
 
@@ -107,15 +113,17 @@ public class ProductoService {
         repository.deleteById(id);
     }
 
-    public List<KardexResponse> kardex(){
-        List<Tuple> data = repository.findKardex();
-        return data.stream().map(x -> new KardexResponse(
+    public Page<KardexResponse> kardex(String categoria, String producto, Integer page, Integer size){
+        List<Tuple> data = repository.findKardexByFilter(categoria, producto);
+        List<KardexResponse> response = data.stream().map(x -> new KardexResponse(
                 x.get("id", BigInteger.class).longValue(),
                 x.get("producto", String.class),
                 x.get("entradas", BigDecimal.class).intValue(),
                 x.get("salidas", BigDecimal.class).intValue(),
                 x.get("stock", BigDecimal.class).intValue())
         ).collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size);
+        return new PageImpl<>(response, pageable, response.size());
     }
 
 }
