@@ -5,17 +5,28 @@ import com.pradera.praderaback.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService service;
+
+    @RequestMapping(path = "/bandeja", method = RequestMethod.GET)
+    public ResponseEntity<Object> bandeja(
+            UsuarioDTO dto,
+            @RequestParam(name = "page") Integer page,
+            @RequestParam(name = "size") Integer size){
+        try {
+            return ResponseEntity.ok().body(service.bandeja(dto,page,size));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.toString());
+        }
+    }
 
     @RequestMapping(path = "/listar", method = RequestMethod.GET)
     public ResponseEntity<List<UsuarioDTO>> listar() {
