@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -35,13 +38,21 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain configure(HttpSecurity http) throws Exception{
+        http.cors().configurationSource(request -> {
+            var cors = new CorsConfiguration();
+            cors.setAllowedOrigins(List.of("http://localhost:4200"));
+            cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+            cors.setAllowedHeaders(List.of("*"));
+            return cors;
+        });
         http.authorizeRequests()
                 .antMatchers("/login/authenticate",
-                        "/usuario/registrar").permitAll()
-                .antMatchers("/usuario/listar",
-                        "/usuario/obtener/**",
-                        "/usuario/actualizar/",
-                        "/usuario/eliminar").hasRole("ADMIN")
+                        "/usuarios/registrar").permitAll()
+                .antMatchers("/usuarios/bandeja",
+                        "/usuarios/listar",
+                        "/usuarios/obtener/**",
+                        "/usuarios/actualizar/",
+                        "/usuarios/eliminar/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
